@@ -37,5 +37,9 @@
   },
   "config": {
     "sort-packages": true
-  }
+  },
+  "repositories": [{
+     "type": "vcs",
+     "url": "https://github.com/ktscript/fedex_rest_api.git"
+  }]
 }

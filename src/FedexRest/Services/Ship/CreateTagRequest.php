@@ -20,6 +20,56 @@ class CreateTagRequest extends AbstractRequest
     protected string $packaging_type;
     protected string $pickup_type;
     protected string $ship_datestamp = '';
+    protected string $params;
+
+    public function __construct()
+    {
+        $this->params = [
+            'json' => [
+                'labelResponseOptions' => 'LABEL',
+                'requestedShipment' => [
+                    'shipper' => $this->shipper->prepare(),
+                    'recipients' => array_map(fn(Person $person) => $person->prepare(), $this->recipients),
+                    'shipDatestamp' => $this->ship_datestamp,
+                    'serviceType' => $this->getServiceType(),
+                    'packagingType' => $this->getPackagingType(),
+                    'pickupType' => $this->getPickupType(),
+                    'blockInsightVisibility' => false,
+                    'shippingChargesPayment' => [
+                        'paymentType' => 'SENDER',
+                    ],
+                    'shipmentSpecialServices' => [
+                        'specialServiceTypes' => [
+                            'RETURN_SHIPMENT',
+                        ],
+                        'returnShipmentDetail' => [
+                            'returnType' => 'PRINT_RETURN_LABEL',
+                        ],
+                    ],
+                    'labelSpecification' => [
+                        'imageType' => 'PDF',
+                        'labelStockType' => 'PAPER_85X11_TOP_HALF_LABEL',
+                    ],
+                    'requestedPackageLineItems' => $this->getLineItems()->prepare(),
+                ],
+                'accountNumber' => [
+                    'value' => $this->account_number,
+                ],
+            ],
+        ];
+    }
+
+    public function getRequestParams(): array
+    {
+        return $this->params;
+    }
+
+
+    public function setRequestParams(array $new_params): int
+    {
+        $this->params = $new_params;
+	return !empty ($this->params);
+    }
 
     /**
      * @inheritDoc
@@ -163,39 +213,6 @@ class CreateTagRequest extends AbstractRequest
     #[ArrayShape(['json' => "array"])]
     public function prepare(): array
     {
-        return [
-            'json' => [
-                'labelResponseOptions' => 'LABEL',
-                'requestedShipment' => [
-                    'shipper' => $this->shipper->prepare(),
-                    'recipients' => array_map(fn(Person $person) => $person->prepare(), $this->recipients),
-                    'shipDatestamp' => $this->ship_datestamp,
-                    'serviceType' => $this->getServiceType(),
-                    'packagingType' => $this->getPackagingType(),
-                    'pickupType' => $this->getPickupType(),
-                    'blockInsightVisibility' => false,
-                    'shippingChargesPayment' => [
-                        'paymentType' => 'SENDER',
-                    ],
-                    'shipmentSpecialServices' => [
-                        'specialServiceTypes' => [
-                            'RETURN_SHIPMENT',
-                        ],
-                        'returnShipmentDetail' => [
-                            'returnType' => 'PRINT_RETURN_LABEL',
-                        ],
-                    ],
-                    'labelSpecification' => [
-                        'imageType' => 'PDF',
-                        'labelStockType' => 'PAPER_85X11_TOP_HALF_LABEL',
-                    ],
-                    'requestedPackageLineItems' => $this->getLineItems()->prepare(),
-                ],
-                'accountNumber' => [
-                    'value' => $this->account_number,
-                ],
-            ],
-        ];
     }
 
     /**
@@ -213,7 +230,7 @@ class CreateTagRequest extends AbstractRequest
         if (empty($this->getLineItems())) {
             throw new MissingLineItemException('Line items are required');
         }
-        return $this->http_client->post($this->getApiUri($this->api_endpoint), $this->prepare());
+        return $this->http_client->post($this->getApiUri($this->api_endpoint), $this->params);
     }
 
 }
