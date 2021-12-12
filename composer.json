@@ -1,0 +1,41 @@
+{
+  "version": "0.1.0",
+  "name": "ktscript/fedex-rest",
+  "description": "Fedex REST API project, adapted for php >=7, guzzle>=7",
+  "keywords": [
+    "shipping",
+    "fedex",
+    "rest",
+    "api"
+  ],
+  "type": "library",
+  "license": "MIT",
+  "support": {
+    "issues": "https://github.com/WhatArmy/FedexRest/issues"
+  },
+  "authors": [
+    {
+      "name": "ktscript and WhatArmy(c2p@whatarmydev.com)",
+      "email": "webdev@ktscript.ru",
+      "homepage": "https://ktscript.com",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">=7.0",
+    "ext-json": "*",
+    "guzzlehttp/guzzle": "^6|^7",
+  },
+  "minimum-stability": "stable",
+  "autoload": {
+    "psr-4": {
+      "FedexRest\\": "src/FedexRest/"
+    },
+    "classmap": [
+      "src/"
+    ]
+  },
+  "config": {
+    "sort-packages": true
+  }
+}
