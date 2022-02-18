@@ -1,5 +1,5 @@
 {
-  "version": "0.1.1",
+  "version": "0.1.0",
   "name": "ktscript/fedex-rest",
   "description": "Fedex REST API project, adapted for php >=7, guzzle>=7",
   "keywords": [
@@ -37,9 +37,5 @@
   },
   "config": {
     "sort-packages": true
-  },
-  "repositories": [{
-     "type": "vcs",
-     "url": "https://github.com/ktscript/fedex_rest_api.git"
-  }]
+  }
 }

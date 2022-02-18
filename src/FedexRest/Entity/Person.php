@@ -47,22 +47,13 @@ class Person
     public function prepare(): array
     {
         $data = [
-            'contact' =>
+            'contact' => (object)
                 [
                     'personName' => $this->personName,
                     'phoneNumber' => $this->phoneNumber,
-                ]
+                ],
+            'address' => empty($this->address) ? null : $this->address->prepare()
         ];
-
-        if ($this->address != null) {
-            $data['address'] = [
-                'streetLines' => $this->address->street_lines,
-                'city' => $this->address->city,
-                'stateOrProvinceCode' => $this->address->state_or_province,
-                'postalCode' => $this->address->postal_code,
-                'countryCode' => $this->address->country_code,
-            ];
-        }
         return $data;
     }
 }

@@ -20,7 +20,7 @@ class CreateTagRequest extends AbstractRequest
     protected string $packaging_type;
     protected string $pickup_type;
     protected string $ship_datestamp = '';
-    protected string $params;
+    protected array $params;
 
     public function __construct()
     {
@@ -28,12 +28,12 @@ class CreateTagRequest extends AbstractRequest
             'json' => [
                 'labelResponseOptions' => 'LABEL',
                 'requestedShipment' => [
-                    'shipper' => $this->shipper->prepare(),
-                    'recipients' => array_map(fn(Person $person) => $person->prepare(), $this->recipients),
-                    'shipDatestamp' => $this->ship_datestamp,
-                    'serviceType' => $this->getServiceType(),
-                    'packagingType' => $this->getPackagingType(),
-                    'pickupType' => $this->getPickupType(),
+                    'shipper' => null, 
+                    'recipients' => null, 
+                    'shipDatestamp' => null, 
+                    'serviceType' => null, 
+                    'packagingType' => null, 
+                    'pickupType' => null, 
                     'blockInsightVisibility' => false,
                     'shippingChargesPayment' => [
                         'paymentType' => 'SENDER',
@@ -50,10 +50,10 @@ class CreateTagRequest extends AbstractRequest
                         'imageType' => 'PDF',
                         'labelStockType' => 'PAPER_85X11_TOP_HALF_LABEL',
                     ],
-                    'requestedPackageLineItems' => $this->getLineItems()->prepare(),
+                    'requestedPackageLineItems' => null, 
                 ],
                 'accountNumber' => [
-                    'value' => $this->account_number,
+                    'value' => null, 
                 ],
             ],
         ];
@@ -65,10 +65,10 @@ class CreateTagRequest extends AbstractRequest
     }
 
 
-    public function setRequestParams(array $new_params): int
+    public function setRequestParams(array $new_params): CreateTagRequest
     {
         $this->params = $new_params;
-	return !empty ($this->params);
+	    return $this;
     }
 
     /**
@@ -224,13 +224,7 @@ class CreateTagRequest extends AbstractRequest
     public function request()
     {
         parent::request();
-        if (empty($this->account_number)) {
-            throw new MissingAccountNumberException('The account number is required');
-        }
-        if (empty($this->getLineItems())) {
-            throw new MissingLineItemException('Line items are required');
-        }
-        return $this->http_client->post($this->getApiUri($this->api_endpoint), $this->params);
+        return $this->http_client->post($this->getApiUri($this->setApiEndpoint()), $this->params);
     }
 
 }
