@@ -1,11 +1,13 @@
 <?php
 
-
 namespace FedexRest\Traits;
 
+use Illuminate\Support\Traits\Conditionable;
 
 trait switchableEnv
 {
+    use Conditionable;
+
     public bool $production_mode = false;
     protected string $production_url = 'https://apis.fedex.com';
     protected string $testing_url = 'https://apis-sandbox.fedex.com';
