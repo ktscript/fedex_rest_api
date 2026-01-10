@@ -10,6 +10,9 @@ use FedexRest\Traits\switchableEnv;
 use GuzzleHttp\Client;
 
 
+/**
+ * Abstract base class for all FedEx API requests
+ */
 abstract class AbstractRequest implements RequestInterface
 {
     use switchableEnv, rawable;
@@ -20,6 +23,7 @@ abstract class AbstractRequest implements RequestInterface
 
     /**
      * AbstractRequest constructor.
+     * Initializes the API endpoint by calling setApiEndpoint()
      */
     public function __construct()
     {
@@ -27,7 +31,9 @@ abstract class AbstractRequest implements RequestInterface
     }
 
     /**
-     * @param  string  $access_token
+     * Set the OAuth access token for API requests
+     *
+     * @param  string  $access_token  OAuth access token
      * @return $this|mixed
      */
     public function setAccessToken(string $access_token)
@@ -36,9 +42,10 @@ abstract class AbstractRequest implements RequestInterface
         return $this;
     }
 
-
     /**
-     * @param $clientId
+     * Set the client ID for authentication
+     *
+     * @param mixed $clientId  FedEx API client ID
      * @return $this
      */
     public function setClientId($clientId)
@@ -48,7 +55,9 @@ abstract class AbstractRequest implements RequestInterface
     }
 
     /**
-     * @param $client_secret
+     * Set the client secret for authentication
+     *
+     * @param mixed $client_secret  FedEx API client secret
      * @return $this|string
      */
     public function setClientSecret($client_secret)
@@ -57,6 +66,12 @@ abstract class AbstractRequest implements RequestInterface
         return $this;
     }
 
+    /**
+     * Initialize HTTP client with authorization headers
+     * Must be called before making API requests
+     *
+     * @throws MissingAccessTokenException  When access token is not set
+     */
     public function request()
     {
         if (empty($this->access_token)) {

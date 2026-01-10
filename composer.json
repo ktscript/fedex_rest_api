@@ -10,12 +10,12 @@
   "type": "library",
   "license": "MIT",
   "support": {
-    "issues": "https://github.com/WhatArmy/FedexRest/issues"
+    "issues": "https://github.com/ktscript/fedex_rest_api/issues"
   },
   "authors": [
     {
-      "name": "ktscript and WhatArmy(c2p@whatarmydev.com)",
-      "email": "webdev@ktscript.ru",
+      "name": "ktscript",
+      "email": "webdev@ktscript.com",
       "homepage": "https://ktscript.com",
       "role": "Developer"
     }

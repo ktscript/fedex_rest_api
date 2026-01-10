@@ -4,7 +4,8 @@
 namespace FedexRest\Services\Ship\Type;
 
 /**
- * Class PackagingType
+ * Packaging type constants for FedEx shipments
+ * Contains all available FedEx packaging types with weight limits
  * @package FedexRest\Services\Ship\Type
  */
 class PackagingType

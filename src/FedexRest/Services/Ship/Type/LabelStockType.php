@@ -2,6 +2,10 @@
 
 namespace FedexRest\Services\Ship\Type;
 
+/**
+ * Label stock type constants for shipping label formats
+ * Defines the paper size and stock type for shipping labels
+ */
 class LabelStockType
 {
     const _PAPER_4X6 = 'PAPER_4X6';

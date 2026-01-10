@@ -8,14 +8,18 @@ use FedexRest\Exceptions\MissingTrackingNumberException;
 use FedexRest\Services\AbstractRequest;
 use GuzzleHttp\Client;
 
+/**
+ * Class for tracking packages by tracking number
+ */
 class TrackByTrackingNumberRequest extends AbstractRequest
 {
     private array $tracking_number;
     private bool $include_detailed_scans = false;
 
-
     /**
-     * @return mixed|string
+     * Get the API endpoint for tracking requests
+     *
+     * @return string  API endpoint path
      */
     public function setApiEndpoint()
     {
@@ -23,7 +27,10 @@ class TrackByTrackingNumberRequest extends AbstractRequest
     }
 
     /**
-     * @param $tracking_number
+     * Set tracking number(s) to track
+     * Can accept a single tracking number or an array of tracking numbers
+     *
+     * @param string|array $tracking_number  Tracking number(s)
      * @return $this
      */
     public function setTrackingNumber($tracking_number)
@@ -32,6 +39,12 @@ class TrackByTrackingNumberRequest extends AbstractRequest
         return $this;
     }
 
+    /**
+     * Execute tracking request to FedEx API
+     *
+     * @return mixed  Decoded JSON response or raw response if asRaw() was called
+     * @throws MissingTrackingNumberException  When tracking number is not set
+     */
     public function request()
     {
         parent::request();
@@ -54,7 +67,9 @@ class TrackByTrackingNumberRequest extends AbstractRequest
     }
 
     /**
-     * @return array
+     * Prepare tracking data for API request
+     *
+     * @return array  Formatted tracking data array
      */
     private function preparedData()
     {
@@ -72,6 +87,8 @@ class TrackByTrackingNumberRequest extends AbstractRequest
     }
 
     /**
+     * Include detailed scan information in the tracking response
+     *
      * @return $this
      */
     public function includeDetailedScans()

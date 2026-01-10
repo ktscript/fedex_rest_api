@@ -4,6 +4,10 @@
 namespace FedexRest\Services\Ship\Type;
 
 
+/**
+ * Service type constants for FedEx shipping services
+ * Contains all available FedEx service type codes
+ */
 class ServiceType
 {
     const _FEDEX_2_DAY = 'FEDEX_2_DAY';

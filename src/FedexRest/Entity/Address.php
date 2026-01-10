@@ -2,6 +2,9 @@
 
 namespace FedexRest\Entity;
 
+/**
+ * Address entity class for storing address information
+ */
 class Address
 {
     public array $street_lines;
@@ -11,7 +14,10 @@ class Address
     public string $country_code;
 
     /**
-     * @param $street_lines
+     * Set street address lines
+     * Can accept multiple street lines as variadic arguments
+     *
+     * @param string ...$street_lines  Street address lines
      * @return $this
      */
     public function setStreetLines(...$street_lines)
@@ -21,7 +27,9 @@ class Address
     }
 
     /**
-     * @param  string  $city
+     * Set the city name
+     *
+     * @param  string  $city  City name
      * @return $this
      */
     public function setCity(string $city)
@@ -31,7 +39,9 @@ class Address
     }
 
     /**
-     * @param  string  $state_or_province
+     * Set the state or province code
+     *
+     * @param  string  $state_or_province  State or province code
      * @return $this
      */
     public function setStateOrProvince(string $state_or_province)
@@ -41,7 +51,9 @@ class Address
     }
 
     /**
-     * @param  int|string  $postal_code
+     * Set the postal/ZIP code
+     *
+     * @param  string  $postal_code  Postal or ZIP code
      * @return $this
      */
     public function setPostalCode(string $postal_code)
@@ -51,7 +63,9 @@ class Address
     }
 
     /**
-     * @param  string  $country_code
+     * Set the country code (ISO 2-letter code)
+     *
+     * @param  string  $country_code  Two-letter country code (e.g., 'US', 'CA')
      * @return $this
      */
     public function setCountryCode(string $country_code)
@@ -60,6 +74,11 @@ class Address
         return $this;
     }
 
+    /**
+     * Prepare address data for API request
+     *
+     * @return array  Formatted address array for FedEx API
+     */
     public function prepare()
     {
         return [

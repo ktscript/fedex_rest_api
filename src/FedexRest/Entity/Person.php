@@ -4,6 +4,10 @@
 namespace FedexRest\Entity;
 
 
+/**
+ * Person entity class for storing contact and address information
+ * Used for shipper and recipient information in shipments
+ */
 class Person
 {
     public ?Address $address = null;
@@ -11,7 +15,9 @@ class Person
     public int $phoneNumber;
 
     /**
-     * @param  mixed  $address
+     * Set the address for this person
+     *
+     * @param  Address  $address  Address object
      * @return Person
      */
     public function withAddress(Address $address)
@@ -20,9 +26,10 @@ class Person
         return $this;
     }
 
-
     /**
-     * @param  mixed  $personName
+     * Set the person's name
+     *
+     * @param  string  $personName  Full name of the person
      * @return Person
      */
     public function setPersonName(string $personName)
@@ -32,7 +39,9 @@ class Person
     }
 
     /**
-     * @param  mixed  $phoneNumber
+     * Set the person's phone number
+     *
+     * @param  int  $phoneNumber  Phone number (digits only, no formatting)
      * @return Person
      */
     public function setPhoneNumber(int $phoneNumber)
@@ -42,7 +51,9 @@ class Person
     }
 
     /**
-     * @return array[]
+     * Prepare person data for API request
+     *
+     * @return array  Formatted person data array for FedEx API
      */
     public function prepare(): array
     {

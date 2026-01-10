@@ -10,6 +10,9 @@ use FedexRest\Services\AbstractRequest;
 use FedexRest\Services\Ship\Type\ServiceType;
 use JetBrains\PhpStorm\ArrayShape;
 
+/**
+ * Class for creating shipping labels (tags) for packages
+ */
 class CreateTagRequest extends AbstractRequest
 {
     protected int $account_number;
@@ -59,12 +62,22 @@ class CreateTagRequest extends AbstractRequest
         ];
     }
 
+    /**
+     * Get current request parameters
+     *
+     * @return array  Current request parameters
+     */
     public function getRequestParams(): array
     {
         return $this->params;
     }
 
-
+    /**
+     * Set custom request parameters
+     *
+     * @param array $new_params  New request parameters array
+     * @return CreateTagRequest
+     */
     public function setRequestParams(array $new_params): CreateTagRequest
     {
         $this->params = $new_params;
@@ -72,7 +85,9 @@ class CreateTagRequest extends AbstractRequest
     }
 
     /**
-     * @inheritDoc
+     * Get the API endpoint for shipping requests
+     *
+     * @return string  API endpoint path
      */
     public function setApiEndpoint(): string
     {
@@ -80,7 +95,9 @@ class CreateTagRequest extends AbstractRequest
     }
 
     /**
-     * @return string
+     * Get the pickup type
+     *
+     * @return string  Current pickup type
      */
     public function getPickupType(): string
     {
@@ -88,7 +105,9 @@ class CreateTagRequest extends AbstractRequest
     }
 
     /**
-     * @param  string  $pickup_type
+     * Set the pickup type for the shipment
+     *
+     * @param  string  $pickup_type  Pickup type constant from PickupType class
      * @return CreateTagRequest
      */
     public function setPickupType(string $pickup_type): CreateTagRequest
@@ -98,7 +117,9 @@ class CreateTagRequest extends AbstractRequest
     }
 
     /**
-     * @return string
+     * Get the packaging type
+     *
+     * @return string  Current packaging type
      */
     public function getPackagingType(): string
     {
@@ -106,7 +127,9 @@ class CreateTagRequest extends AbstractRequest
     }
 
     /**
-     * @param  string  $packaging_type
+     * Set the packaging type for the shipment
+     *
+     * @param  string  $packaging_type  Packaging type constant from PackagingType class
      * @return CreateTagRequest
      */
     public function setPackagingType(string $packaging_type): CreateTagRequest
@@ -116,7 +139,9 @@ class CreateTagRequest extends AbstractRequest
     }
 
     /**
-     * @return Item
+     * Get the line items for the shipment
+     *
+     * @return Item  Current line items
      */
     public function getLineItems(): Item
     {
@@ -124,8 +149,10 @@ class CreateTagRequest extends AbstractRequest
     }
 
     /**
-     * @param  Item  $line_items
-     * @return $this
+     * Set the line items (package contents) for the shipment
+     *
+     * @param  Item  $line_items  Item object with description and weight
+     * @return CreateTagRequest
      */
     public function setLineItems(Item $line_items): CreateTagRequest
     {
@@ -134,7 +161,9 @@ class CreateTagRequest extends AbstractRequest
     }
 
     /**
-     * @param  string  $ship_datestamp
+     * Set the ship date for the shipment
+     *
+     * @param  string  $ship_datestamp  Ship date in YYYY-MM-DD format
      * @return CreateTagRequest
      */
     public function setShipDatestamp(string $ship_datestamp): CreateTagRequest
@@ -144,7 +173,9 @@ class CreateTagRequest extends AbstractRequest
     }
 
     /**
-     * @param  mixed  $service_type
+     * Set the service type for the shipment
+     *
+     * @param  string  $service_type  Service type constant from ServiceType class
      * @return CreateTagRequest
      */
     public function setServiceType(string $service_type): CreateTagRequest
@@ -154,7 +185,9 @@ class CreateTagRequest extends AbstractRequest
     }
 
     /**
-     * @return string
+     * Get the service type
+     *
+     * @return string  Current service type
      */
     public function getServiceType(): string
     {
@@ -162,7 +195,9 @@ class CreateTagRequest extends AbstractRequest
     }
 
     /**
-     * @return array
+     * Get the recipients array
+     *
+     * @return array  Array of Person objects (recipients)
      */
     public function getRecipients(): array
     {
@@ -170,7 +205,9 @@ class CreateTagRequest extends AbstractRequest
     }
 
     /**
-     * @return Person
+     * Get the shipper
+     *
+     * @return Person  Shipper Person object
      */
     public function getShipper(): Person
     {
@@ -178,8 +215,10 @@ class CreateTagRequest extends AbstractRequest
     }
 
     /**
-     * @param  Person  $shipper
-     * @return $this
+     * Set the shipper (sender) information
+     *
+     * @param  Person  $shipper  Person object with shipper details and address
+     * @return CreateTagRequest
      */
     public function setShipper(Person $shipper): CreateTagRequest
     {
@@ -188,8 +227,11 @@ class CreateTagRequest extends AbstractRequest
     }
 
     /**
-     * @param  Person  ...$recipients
-     * @return $this
+     * Set the recipients for the shipment
+     * Can accept multiple Person objects as variadic arguments
+     *
+     * @param  Person  ...$recipients  One or more Person objects (recipients)
+     * @return CreateTagRequest
      */
     public function setRecipients(Person ...$recipients): CreateTagRequest
     {
@@ -198,8 +240,10 @@ class CreateTagRequest extends AbstractRequest
     }
 
     /**
-     * @param  int  $account_number
-     * @return $this
+     * Set the FedEx account number
+     *
+     * @param  int  $account_number  FedEx account number
+     * @return CreateTagRequest
      */
     public function setAccountNumber(int $account_number): CreateTagRequest
     {
@@ -208,7 +252,9 @@ class CreateTagRequest extends AbstractRequest
     }
 
     /**
-     * @return array[]
+     * Prepare request data for API call
+     *
+     * @return array  Prepared request data array
      */
     #[ArrayShape(['json' => "array"])]
     public function prepare(): array
@@ -216,10 +262,12 @@ class CreateTagRequest extends AbstractRequest
     }
 
     /**
-     * @return mixed|\Psr\Http\Message\ResponseInterface|void
-     * @throws MissingAccountNumberException
-     * @throws MissingLineItemException
-     * @throws \FedexRest\Exceptions\MissingAccessTokenException
+     * Execute shipping label creation request to FedEx API
+     *
+     * @return mixed|\Psr\Http\Message\ResponseInterface  API response
+     * @throws MissingAccountNumberException  When account number is not set
+     * @throws MissingLineItemException  When line items are not set
+     * @throws \FedexRest\Exceptions\MissingAccessTokenException  When access token is not set
      */
     public function request()
     {

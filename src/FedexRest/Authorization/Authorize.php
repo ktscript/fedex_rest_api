@@ -10,6 +10,9 @@ use FedexRest\Traits\switchableEnv;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 
+/**
+ * Class for handling FedEx OAuth 2.0 authorization
+ */
 class Authorize
 {
     use switchableEnv, rawable;
@@ -18,7 +21,9 @@ class Authorize
     private string $client_secret;
 
     /**
-     * @param  string  $client_id
+     * Set the client ID for OAuth authorization
+     *
+     * @param  string  $client_id  FedEx API client ID
      * @return Authorize
      */
     public function setClientId(string $client_id): Authorize
@@ -28,7 +33,9 @@ class Authorize
     }
 
     /**
-     * @param  string  $client_secret
+     * Set the client secret for OAuth authorization
+     *
+     * @param  string  $client_secret  FedEx API client secret
      * @return Authorize
      */
     public function setClientSecret(string $client_secret): Authorize
@@ -37,11 +44,12 @@ class Authorize
         return $this;
     }
 
-
     /**
-     * @return mixed|string
-     * @throws MissingAuthCredentialsException
-     * @throws GuzzleException
+     * Authorize and obtain access token from FedEx API
+     *
+     * @return mixed|string  Access token object or error message
+     * @throws MissingAuthCredentialsException  When client ID or secret is not provided
+     * @throws GuzzleException  When HTTP request fails
      */
     public function authorize()
     {

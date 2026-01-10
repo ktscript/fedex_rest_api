@@ -4,6 +4,10 @@ namespace FedexRest\Traits;
 
 use Illuminate\Support\Traits\Conditionable;
 
+/**
+ * Trait for switching between sandbox and production environments
+ * Uses Laravel's Conditionable trait for conditional method chaining
+ */
 trait switchableEnv
 {
     use Conditionable;
@@ -13,8 +17,10 @@ trait switchableEnv
     protected string $testing_url = 'https://apis-sandbox.fedex.com';
 
     /**
-     * @param $endpoint
-     * @return string
+     * Get the full API URI based on current environment (sandbox or production)
+     *
+     * @param string $endpoint  API endpoint path to append
+     * @return string  Full API URL
      */
     public function getApiUri($endpoint = '')
     {
@@ -22,6 +28,9 @@ trait switchableEnv
     }
 
     /**
+     * Switch to production environment
+     * By default, requests use sandbox (testing) environment
+     *
      * @return $this
      */
     public function useProduction()

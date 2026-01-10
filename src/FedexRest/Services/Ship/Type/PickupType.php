@@ -4,7 +4,8 @@
 namespace FedexRest\Services\Ship\Type;
 
 /**
- * Class PickupType
+ * Pickup type constants for FedEx shipments
+ * Defines how packages will be picked up from the shipper
  * @package FedexRest\Services\Ship\Type
  */
 class PickupType
