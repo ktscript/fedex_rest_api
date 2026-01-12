@@ -267,7 +267,7 @@ $tracking->setAccessToken($token)
 ## Support
 
 For issues, questions, or contributions, please visit:
-- [GitHub Issues](https://github.com/WhatArmy/FedexRest/issues)
+- [GitHub Issues](https://github.com/ktscript/fedex_rest_api/issues)
 
 ## License
 
