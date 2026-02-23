@@ -183,7 +183,7 @@ $locationSearch = new LocationSearchRequest();
 $result = $locationSearch->setAccessToken($token)
     ->setAddress($address)
     ->setDistance(10, LocationSearchRequest::UNITS_KM)
-    ->setLocationTypes([LocationType::FEDEX_OFFICE, LocationType::FEDEX_DROP_BOX])
+    ->setLocationTypes([LocationType::FEDEX_OFFICE, LocationType::FEDEX_SELF_SERVICE_LOCATION])
     ->setResultsLimit(15)
     ->useProduction()
     ->request();

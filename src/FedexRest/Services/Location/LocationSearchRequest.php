@@ -13,7 +13,8 @@ use FedexRest\Services\AbstractRequest;
 class LocationSearchRequest extends AbstractRequest
 {
     public const CRITERION_ADDRESS = 'ADDRESS';
-    public const CRITERION_GEO_COORDINATES = 'GEO_COORDINATES';
+    /** FedEx API enum: GEOGRAPHIC_COORDINATES (not GEO_COORDINATES) */
+    public const CRITERION_GEO_COORDINATES = 'GEOGRAPHIC_COORDINATES';
     public const CRITERION_PHONE_NUMBER = 'PHONE_NUMBER';
 
     public const UNITS_KM = 'KM';
@@ -48,11 +49,11 @@ class LocationSearchRequest extends AbstractRequest
 
     /**
      * API endpoint for Location Search.
-     * FedEx Location Search API: POST https://apis.fedex.com/locations/v1
+     * FedEx Location Search API: POST https://apis.fedex.com/location/v1/locations
      */
     public function setApiEndpoint(): string
     {
-        return '/locations/v1';
+        return '/location/v1/locations';
     }
 
     /**
@@ -120,22 +121,24 @@ class LocationSearchRequest extends AbstractRequest
     public function prepare(): array
     {
         $body = [
-            'locationsSearchCriterion' => $this->locationsSearchCriterion,
+            'locationSearchCriterion' => $this->locationsSearchCriterion,
             'multipleMatchesAction' => 'RETURN_ALL',
             'sortBy' => 'DISTANCE',
             'resultsToReturn' => $this->resultsLimit,
         ];
 
         if ($this->locationsSearchCriterion === self::CRITERION_ADDRESS && $this->address !== null) {
-            $body['address'] = $this->address->prepare();
+            $body['location'] = $this->address->prepare();
         }
 
         if ($this->locationsSearchCriterion === self::CRITERION_GEO_COORDINATES
             && $this->latitude !== null
             && $this->longitude !== null
         ) {
-            $body['latitude'] = $this->latitude;
-            $body['longitude'] = $this->longitude;
+            $body['location'] = [
+                'latitude' => $this->latitude,
+                'longitude' => $this->longitude,
+            ];
         }
 
         if ($this->locationsSearchCriterion === self::CRITERION_PHONE_NUMBER && $this->phoneNumber !== null) {
