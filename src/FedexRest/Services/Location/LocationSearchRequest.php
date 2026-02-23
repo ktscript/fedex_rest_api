@@ -48,11 +48,11 @@ class LocationSearchRequest extends AbstractRequest
 
     /**
      * API endpoint for Location Search.
-     * FedEx Location Search API: POST https://apis.fedex.com/locations/v1/locations
+     * FedEx Location Search API: POST https://apis.fedex.com/locations/v1
      */
     public function setApiEndpoint(): string
     {
-        return '/locations/v1/locations';
+        return '/locations/v1';
     }
 
     /**
