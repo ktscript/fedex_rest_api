@@ -8,6 +8,7 @@ PHP package for integrating with FedEx REST API. This package provides a simple 
 - 🔐 **OAuth 2.0 Support** - Built-in authorization handling
 - 📦 **Shipping Labels** - Create shipping labels and track packages
 - 📍 **Address Validation** - Validate addresses using FedEx API
+- 📌 **Location Search** - Find FedEx pickup/dropoff locations by address, coordinates, or phone
 - 🔄 **Environment Switching** - Switch between sandbox and production environments easily
 - 🎯 **Laravel Compatible** - Works seamlessly with Laravel 7-12+ using Conditionable trait
 - 🔧 **Fluent Interface** - Chainable methods for building requests
@@ -161,6 +162,44 @@ $validation->setAccessToken($token)
     ->request();
 ```
 
+### Location Search (FedEx Location API)
+
+Search for FedEx pickup and dropoff locations by address, coordinates, or phone:
+
+```php
+use FedexRest\Services\Location\LocationSearchRequest;
+use FedexRest\Services\Location\Type\LocationType;
+use FedexRest\Entity\Address;
+
+// Search by address
+$address = new Address();
+$address->setStreetLines('123 Main St')
+    ->setCity('Memphis')
+    ->setStateOrProvince('TN')
+    ->setPostalCode('38116')
+    ->setCountryCode('US');
+
+$locationSearch = new LocationSearchRequest();
+$result = $locationSearch->setAccessToken($token)
+    ->setAddress($address)
+    ->setDistance(10, LocationSearchRequest::UNITS_KM)
+    ->setLocationTypes([LocationType::FEDEX_OFFICE, LocationType::FEDEX_DROP_BOX])
+    ->setResultsLimit(15)
+    ->useProduction()
+    ->request();
+
+// Or search by coordinates
+$result = $locationSearch->setAccessToken($token)
+    ->setCoordinates(35.1495, -90.0490)
+    ->setDistance(5, LocationSearchRequest::UNITS_MI)
+    ->request();
+
+// Or search by phone number
+$result = $locationSearch->setAccessToken($token)
+    ->setPhoneNumber('9015551234')
+    ->request();
+```
+
 ### Environment Switching
 
 The package supports easy switching between sandbox (testing) and production environments:
@@ -268,6 +307,7 @@ $tracking->setAccessToken($token)
 
 For issues, questions, or contributions, please visit:
 - [GitHub Issues](https://github.com/ktscript/fedex_rest_api/issues)
+- [Telegram: @ktscript](https://t.me/ktscript) — contact the author
 
 ## License
 
@@ -278,6 +318,11 @@ This package is open-sourced software licensed under the [MIT license](https://o
 Special thanks to [Sinnbeck](http://github.com/Sinnbeck) for the help and contributions.
 
 ## Changelog
+
+### 1.2.0
+- FedEx Location API: search pickup/dropoff locations by address, coordinates, or phone
+- `LocationSearchRequest` and `LocationType` constants
+- Support contact: Telegram [@ktscript](https://t.me/ktscript) added to README and composer.json
 
 ### 1.0.0
 - Initial stable release

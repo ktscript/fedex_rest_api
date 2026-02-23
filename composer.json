@@ -10,7 +10,8 @@
   "type": "library",
   "license": "MIT",
   "support": {
-    "issues": "https://github.com/ktscript/fedex_rest_api/issues"
+    "issues": "https://github.com/ktscript/fedex_rest_api/issues",
+    "chat": "https://t.me/ktscript"
   },
   "authors": [
     {
