@@ -326,8 +326,12 @@ Special thanks to [Sinnbeck](http://github.com/Sinnbeck) for the help and contri
 
 ## Changelog
 
-### 1.2.1
-- Fix Location API endpoint path: `/loc/v1/locations` → `/locations/v1/locations` (FedEx correct path)
+### 1.2.1-1.2.5
+- Fix Location API
+- Add `LocationType` constants
+- Add `LocationSearchRequest`
+- Add `LocationSearchResponse`
+- Add `LocationSearchResponseItem`
 
 ### 1.2.0
 - FedEx Location API: search pickup/dropoff locations by address, coordinates, or phone
