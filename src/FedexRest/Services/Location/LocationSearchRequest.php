@@ -8,6 +8,13 @@ use FedexRest\Services\AbstractRequest;
 
 /**
  * FedEx Location Search API – search for pickup/dropoff locations by address, coordinates, or phone.
+ *
+ * Response (decoded JSON): object with transactionId, customerTransactionId, output.
+ * Use output.totalResults, output.resultsReturned, output.locationDetailList (array of locations),
+ * output.nearestLocation, output.matchedAddress, output.alerts.
+ * Each item in locationDetailList has: distance, contactAndAddress (address, contact, displayName),
+ * locationId, storeHours, carrierDetailList, locationType, locationCapabilities, etc.
+ *
  * @see https://developer.fedex.com/api/en-us/catalog/locations/v1/docs.html
  */
 class LocationSearchRequest extends AbstractRequest
@@ -117,18 +124,23 @@ class LocationSearchRequest extends AbstractRequest
 
     /**
      * Build request body for Location Search API.
+     * Structure per FedEx docs: location.address, locationsSummaryRequestControlParameters, sort.
      */
     public function prepare(): array
     {
         $body = [
             'locationSearchCriterion' => $this->locationsSearchCriterion,
             'multipleMatchesAction' => 'RETURN_ALL',
-            'sortBy' => 'DISTANCE',
-            'resultsToReturn' => $this->resultsLimit,
+            'sort' => [
+                'criteria' => 'DISTANCE',
+                'order' => 'ASCENDING',
+            ],
         ];
 
         if ($this->locationsSearchCriterion === self::CRITERION_ADDRESS && $this->address !== null) {
-            $body['location'] = $this->address->prepare();
+            $body['location'] = [
+                'address' => $this->filterEmptyLocationAddress($this->address->prepare()),
+            ];
         }
 
         if ($this->locationsSearchCriterion === self::CRITERION_GEO_COORDINATES
@@ -136,8 +148,10 @@ class LocationSearchRequest extends AbstractRequest
             && $this->longitude !== null
         ) {
             $body['location'] = [
-                'latitude' => $this->latitude,
-                'longitude' => $this->longitude,
+                'longLat' => [
+                    'latitude' => $this->latitude,
+                    'longitude' => $this->longitude,
+                ],
             ];
         }
 
@@ -145,12 +159,15 @@ class LocationSearchRequest extends AbstractRequest
             $body['phoneNumber'] = $this->phoneNumber;
         }
 
+        $controlParams = [];
         if ($this->distanceValue !== null) {
-            $body['distance'] = [
+            $controlParams['distance'] = [
                 'value' => $this->distanceValue,
                 'units' => $this->distanceUnits,
             ];
         }
+        $controlParams['maxResults'] = $this->resultsLimit;
+        $body['locationsSummaryRequestControlParameters'] = $controlParams;
 
         if ($this->locationTypes !== []) {
             $body['locationTypes'] = $this->locationTypes;
@@ -159,6 +176,30 @@ class LocationSearchRequest extends AbstractRequest
         return [
             'json' => $body,
         ];
+    }
+
+    /**
+     * Remove empty strings and empty arrays from address so FedEx validation does not reject (422).
+     */
+    private function filterEmptyLocationAddress(array $address): array
+    {
+        $out = [];
+        foreach ($address as $key => $value) {
+            if ($value === null || $value === '') {
+                continue;
+            }
+            if (is_array($value)) {
+                $value = array_filter($value, static function ($v) {
+                    return $v !== null && $v !== '';
+                });
+                if ($value !== []) {
+                    $out[$key] = array_values($value);
+                }
+                continue;
+            }
+            $out[$key] = $value;
+        }
+        return $out;
     }
 
     /**

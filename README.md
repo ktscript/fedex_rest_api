@@ -200,6 +200,13 @@ $result = $locationSearch->setAccessToken($token)
     ->request();
 ```
 
+The response is a decoded object. Main keys:
+- `output.totalResults`, `output.resultsReturned` — count of locations
+- `output.locationDetailList` — array of locations (each has `distance`, `contactAndAddress` with `address`/`contact`/`displayName`, `locationId`, `storeHours`, `carrierDetailList`, `locationType`, `locationCapabilities`, etc.)
+- `output.nearestLocation`, `output.latestLocation` — single location objects when applicable
+- `output.matchedAddress` — normalized search address
+- `output.alerts` — optional messages
+
 ### Environment Switching
 
 The package supports easy switching between sandbox (testing) and production environments:
